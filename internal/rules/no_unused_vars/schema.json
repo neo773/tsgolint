@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "no_unused_vars_options": {
+      "type": "object",
+      "properties": {
+        "vars": {
+          "type": "string",
+          "enum": ["all", "local"],
+          "default": "all"
+        },
+        "args": {
+          "type": "string",
+          "enum": ["all", "after-used", "none"],
+          "default": "after-used"
+        },
+        "varsIgnorePattern": {
+          "type": "string",
+          "default": ""
+        },
+        "argsIgnorePattern": {
+          "type": "string",
+          "default": ""
+        },
+        "caughtErrors": {
+          "type": "string",
+          "enum": ["all", "none"],
+          "default": "all"
+        },
+        "caughtErrorsIgnorePattern": {
+          "type": "string",
+          "default": ""
+        },
+        "destructuredArrayIgnorePattern": {
+          "type": "string",
+          "default": ""
+        },
+        "ignoreRestSiblings": {
+          "type": "boolean",
+          "default": false
+        },
+        "ignoreClassWithStaticInitBlock": {
+          "type": "boolean",
+          "default": false
+        },
+        "reportUsedIgnorePattern": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    }
+  }
+}

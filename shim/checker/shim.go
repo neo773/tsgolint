@@ -79,6 +79,8 @@ const CheckModeTypeOnly = checker.CheckModeTypeOnly
 type Checker = checker.Checker
 //go:linkname Checker_getImmediateAliasedSymbol github.com/microsoft/typescript-go/internal/checker.(*Checker).getImmediateAliasedSymbol
 func Checker_getImmediateAliasedSymbol(recv *checker.Checker, symbol *ast.Symbol) *ast.Symbol
+//go:linkname Checker_isReferenced github.com/microsoft/typescript-go/internal/checker.(*Checker).isReferenced
+func Checker_isReferenced(recv *checker.Checker, symbol *ast.Symbol) bool
 //go:linkname Checker_getContextFreeTypeOfExpression github.com/microsoft/typescript-go/internal/checker.(*Checker).getContextFreeTypeOfExpression
 func Checker_getContextFreeTypeOfExpression(recv *checker.Checker, node *ast.Node) *checker.Type
 //go:linkname Checker_getResolvedSignature github.com/microsoft/typescript-go/internal/checker.(*Checker).getResolvedSignature
@@ -1293,3 +1295,18 @@ func GetFunctionFlags(node *ast.Node) checker.FunctionFlags
 func GetMappedTypeModifiers(t *checker.Type) checker.MappedTypeModifiers
 //go:linkname IsNonDeferredTypeReference github.com/microsoft/typescript-go/internal/checker.isNonDeferredTypeReference
 func IsNonDeferredTypeReference(t *checker.Type) bool
+
+//go:linkname Checker_checkSourceFile github.com/microsoft/typescript-go/internal/checker.(*Checker).checkSourceFile
+func Checker_checkSourceFile(recv *checker.Checker, ctx context.Context, sourceFile *ast.SourceFile)
+
+// extra_SymbolReferenceLinks mirrors checker.SymbolReferenceLinks to access unexported fields.
+type extra_SymbolReferenceLinks struct {
+	referenceKinds ast.SymbolFlags
+}
+
+// Checker_getSymbolReferenceKinds returns the SymbolFlags representing which meanings of the
+// symbol have been referenced (value, type, namespace, etc).
+func Checker_getSymbolReferenceKinds(v *checker.Checker, symbol *ast.Symbol) ast.SymbolFlags {
+	links := ((*extra_Checker)(unsafe.Pointer(v))).symbolReferenceLinks.Get(symbol)
+	return ((*extra_SymbolReferenceLinks)(unsafe.Pointer(links))).referenceKinds
+}
